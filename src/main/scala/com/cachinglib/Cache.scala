@@ -8,9 +8,6 @@ import java.util.concurrent.locks.ReentrantLock
 /**
  * A thread-safe, general-purpose, in-memory cache.
  *
- * This class is designed to be highly extensible by delegating eviction logic
- * to a swappable `EvictionPolicy`.
- *
  * Use the `Cache.Builder` to construct an instance.
  *
  * @tparam K The type of the keys.
@@ -25,8 +22,9 @@ class Cache[K, V] private (
 
   /**
    * Retrieves the value associated with a key.
-   * Returns `None` if the key is not in the cache.
-   * This operation is thread-safe and updates the eviction policy (e.g., for LRU).
+   * 
+   * @param key The key to look up.
+   * @return An `Option` containing the value if found, or `None` if not.
    */
   def get(key: K): Option[V] =
     lock.lock()
@@ -40,7 +38,9 @@ class Cache[K, V] private (
   /**
    * Adds or updates a key-value pair in the cache.
    * If the cache is at capacity, it evicts an item based on the configured policy.
-   * This operation is thread-safe.
+   * 
+   * @param key The key to add or update.
+   * @param value The value to associate with the key.
    */
   def put(key: K, value: V): Unit =
     lock.lock()
@@ -64,6 +64,7 @@ class Cache[K, V] private (
   /**
    * Removes a key and its associated value from the cache.
    *
+   * @param key The key to remove.
    * @return The removed value, or `None` if the key was not found.
    */
   def remove(key: K): Option[V] =
@@ -98,11 +99,12 @@ class Cache[K, V] private (
 
 object Cache:
   /**
-   * A fluent builder for creating `Cache` instances.
+   * A builder for creating `Cache` instances.
    */
   class Builder[K, V]:
     private var capacity: Option[Int] = None
     private var policy: Option[EvictionPolicy[K]] = None
+    private var storage: Option[Storage[K, V]] = None
 
     /**
      * Sets the maximum number of items the cache can hold.
@@ -122,6 +124,14 @@ object Cache:
       this
 
     /**
+     * Sets the storage implementation for the cache.
+     * Optional; defaults to InMemoryStorage if not set.
+     */
+    def withStorage(s: Storage[K, V]): Builder[K, V] =
+      this.storage = Some(s)
+      this
+
+    /**
      * Builds and returns a new `Cache` instance.
      *
      * @throws IllegalStateException if capacity or policy have not been set.
@@ -129,4 +139,5 @@ object Cache:
     def build(): Cache[K, V] =
       val finalCapacity = capacity.getOrElse(throw new IllegalStateException("Capacity must be set."))
       val finalPolicy = policy.getOrElse(throw new IllegalStateException("Eviction policy must be set."))
-      new Cache(finalCapacity, finalPolicy, new InMemoryStorage[K, V]())
+      val finalStorage = storage.getOrElse(new InMemoryStorage[K, V]())
+      new Cache(finalCapacity, finalPolicy, finalStorage)
