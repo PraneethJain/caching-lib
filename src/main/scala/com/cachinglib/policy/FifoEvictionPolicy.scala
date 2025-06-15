@@ -1,10 +1,9 @@
 package com.cachinglib.policy
 
-/**
- * Implements a First-In, First-Out (FIFO) eviction policy with O(1) operations.
- * The first key inserted is the first to be evicted.
- * Access order does not affect eviction order.
- */
+/** Implements a First-In, First-Out (FIFO) eviction policy with O(1)
+  * operations. The first key inserted is the first to be evicted. Access order
+  * does not affect eviction order.
+  */
 class FifoEvictionPolicy[K] extends AbstractLinkedEvictionPolicy[K]:
   override def trackAccess(key: K): Unit = ()
 

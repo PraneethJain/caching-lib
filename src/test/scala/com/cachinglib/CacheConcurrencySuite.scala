@@ -24,10 +24,8 @@ class CacheConcurrencySuite extends AnyFunSuite with Matchers:
     val tasks = (1 to numOperations).map { i =>
       Future {
         val key = Random.nextInt(keyRange)
-        if Random.nextBoolean() then
-          cache.put(key, i)
-        else
-          cache.get(key)
+        if Random.nextBoolean() then cache.put(key, i)
+        else cache.get(key)
       }
     }
 

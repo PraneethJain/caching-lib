@@ -1,10 +1,9 @@
 package com.cachinglib.policy
 
-/**
- * Implements a Last-In, First-Out (LIFO) or stack-based eviction policy.
- * The most recently inserted key is the first to be evicted.
- * Access order does not affect eviction order.
- */
+/** Implements a Last-In, First-Out (LIFO) or stack-based eviction policy. The
+  * most recently inserted key is the first to be evicted. Access order does not
+  * affect eviction order.
+  */
 class LifoEvictionPolicy[K] extends AbstractLinkedEvictionPolicy[K]:
   override def trackAccess(key: K): Unit = ()
 

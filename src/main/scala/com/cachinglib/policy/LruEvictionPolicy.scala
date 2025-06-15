@@ -1,11 +1,8 @@
 package com.cachinglib.policy
 
-/**
- * Implements a Least Recently Used (LRU) eviction policy.
- * Evicts the key that has not been accessed for the longest time.
- * Achieves O(1) time complexity for all operations using a combination
- * of a HashMap and a Doubly Linked List.
- */
+/** Implements a Least Recently Used (LRU) eviction policy. Evicts the key that
+  * has not been accessed for the longest time.
+  */
 class LruEvictionPolicy[K] extends AbstractLinkedEvictionPolicy[K]:
   override def trackAccess(key: K): Unit =
     nodeMap.get(key).foreach { node =>
@@ -14,8 +11,7 @@ class LruEvictionPolicy[K] extends AbstractLinkedEvictionPolicy[K]:
     }
 
   override def trackInsertion(key: K): Unit =
-    if nodeMap.contains(key) then
-      trackAccess(key)
+    if nodeMap.contains(key) then trackAccess(key)
     else
       val newNode = new Node(key, null, null)
       nodeMap.put(key, newNode)

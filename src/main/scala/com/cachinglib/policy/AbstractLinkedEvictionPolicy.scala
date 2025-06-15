@@ -2,15 +2,17 @@ package com.cachinglib.policy
 
 import scala.collection.mutable
 
-/**
- * Abstract base class for eviction policies using a doubly-linked list and hashmap for O(1) operations.
- * Subclasses define how to handle access, insertion, and eviction.
- */
+/** Abstract base class for eviction policies using a doubly-linked list and
+  * hashmap for O(1) operations. Subclasses define how to handle access,
+  * insertion, and eviction.
+  */
 abstract class AbstractLinkedEvictionPolicy[K] extends EvictionPolicy[K]:
   protected class Node(val key: K, var prev: Node, var next: Node)
   protected val nodeMap = mutable.Map.empty[K, Node]
-  protected val head = new Node(null.asInstanceOf[K], null, null) // Sentinel head
-  protected val tail = new Node(null.asInstanceOf[K], head, null) // Sentinel tail
+  protected val head =
+    new Node(null.asInstanceOf[K], null, null) // Sentinel head
+  protected val tail =
+    new Node(null.asInstanceOf[K], head, null) // Sentinel tail
   head.next = tail
   tail.prev = head
 

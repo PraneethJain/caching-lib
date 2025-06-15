@@ -2,11 +2,10 @@ package com.cachinglib.storage
 
 import scala.collection.mutable
 
-/**
- * A simple in-memory storage implementation using a mutable HashMap.
- * Note: This class itself is not thread-safe; thread safety is handled
- * by the `Cache` class that uses it.
- */
+/** A simple in-memory storage implementation using a mutable HashMap. Note:
+  * This class itself is not thread-safe; thread safety is handled by the
+  * `Cache` class that uses it.
+  */
 class InMemoryStorage[K, V] extends Storage[K, V]:
   private val map = mutable.Map.empty[K, V]
 

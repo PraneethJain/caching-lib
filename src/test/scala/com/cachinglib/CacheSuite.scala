@@ -15,7 +15,7 @@ class CacheSuite extends AnyFunSuite with Matchers:
     cache.put("a", 1) // a
     cache.put("b", 2) // b, a
     cache.put("c", 3) // c, b, a
-    cache.get("a")    // a, c, b (a is now most recent)
+    cache.get("a") // a, c, b (a is now most recent)
 
     cache.put("d", 4) // d, a, c (b is evicted)
 
@@ -35,7 +35,7 @@ class CacheSuite extends AnyFunSuite with Matchers:
     cache.put("a", 1) // a
     cache.put("b", 2) // a, b
     cache.put("c", 3) // a, b, c
-    cache.get("a")    // Accessing 'a' does not change its eviction order
+    cache.get("a") // Accessing 'a' does not change its eviction order
 
     cache.put("d", 4) // b, c, d (a is evicted)
 
@@ -66,7 +66,7 @@ class CacheSuite extends AnyFunSuite with Matchers:
       .withCapacity(5)
       .withPolicy(new LruEvictionPolicy())
       .build()
-      
+
     cache.put("a", 1)
     cache.put("b", 2)
     cache.size should be(2)
@@ -81,10 +81,10 @@ class CacheSuite extends AnyFunSuite with Matchers:
       .withCapacity(2)
       .withPolicy(new LruEvictionPolicy())
       .build()
-      
+
     cache.put("a", 1)
     cache.put("a", 100)
-    
+
     cache.size should be(1)
     cache.get("a") should be(Some(100))
   }
